@@ -1,0 +1,147 @@
+---
+title: An R Markdown document converted from "Copy_of_Applying_Fun_R.ipynb"
+output: html_document
+---
+
+# Applying functions in R
+
+Installing to tead Excel files:
+
+```{r}
+# install.packages('rio')
+```
+
+# reading data
+
+```{r}
+# opening a file from a url (file in Excel), name it 'fragility23'
+linkGit="https://github.com/DACSS-Fundamentals/overview/raw/refs/heads/main/FSI-2023-DOWNLOAD.xlsx"
+
+# library(rio) # package needed
+fragility23=rio::import(file = linkGit) #object that will hold the result
+```
+
+```{r}
+str(fragility23)
+```
+
+## Apply square root function?
+
+```{r}
+# whole DF?
+sqrt(fragility23)
+```
+
+```{r}
+# several columns (only numerical)
+
+sqrt(fragility23[,4:5])
+```
+
+```{r}
+# one column
+sqrt(fragility23$Total)
+```
+
+```{r}
+# one value
+sqrt(fragility23$Total[1])
+```
+
+## Applying **sum()**:
+
+```{r}
+# sum everything
+sum(fragility23[,4:5])
+```
+
+```{r}
+# sum by column
+print(apply(fragility23[,4:5],2,sum))
+```
+
+```{r}
+#notice
+typeof(apply(fragility23[,4:5],2,sum))
+```
+
+If you do not see **list**, then it is a vector. ⏫
+
+```{r}
+# sum by row
+print(apply(fragility23[,4:5],1,sum))
+```
+
+### Apply by iterating:
+
+```{r}
+print(lapply(fragility23[,4:5],sum))
+```
+
+Notice output of **lapply**:
+
+```{r}
+typeof(lapply(fragility23[,4:5],sum))
+```
+
+```{r}
+class(lapply(fragility23[,4:5],sum))
+```
+
+Notice output of **sapply**:
+
+```{r}
+print(sapply(fragility23[,4:5],sum))
+```
+
+```{r}
+class(sapply(fragility23[,4:5],sum))
+```
+
+Similarly:
+
+```{r}
+print(lapply(fragility23[,4:5],sqrt))
+```
+
+```{r}
+class(lapply(fragility23[,4:5],sqrt))
+```
+
+```{r}
+print(sapply(fragility23[,4:5],sqrt))
+```
+
+```{r}
+class(sapply(fragility23[,4:5],sqrt))
+```
+
+Now our own function:
+
+```{r}
+theOnesOK = function(DF_country_and_variable) {
+  variable_values <- DF_country_and_variable[,2]
+  avg_value <- mean(variable_values, na.rm = TRUE)
+  is_above <- ifelse(variable_values > avg_value, "Above Average", "Below/At Average")
+  DF_country_and_variable$Status <- is_above
+  return(DF_country_and_variable)
+}
+```
+
+```{r}
+theOnesOK(fragility23[,c('Country','S1: Demographic Pressures')])
+```
+
+```{r}
+mystery=function(DF,positionsToUse,CountryColumn='Country'){
+  newDF=DF[,c(CountryColumn),drop = FALSE]
+  average='average'
+  newDF[,average]=apply(DF[,positionsToUse],1,mean,na.rm = TRUE)
+  return(newDF[,c(CountryColumn,average)])
+}
+```
+
+```{r}
+mystery(fragility23,4:6)
+```
+
