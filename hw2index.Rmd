@@ -5,64 +5,54 @@ output: html_document
 
 # Applying functions in R
 
-Installing to tead Excel files:
+Installing to read Excel files:
 
 ```{r}
-# install.packages('rio')
+install.packages('rio') ## code requests installing the package 'rio'
 ```
 
 # reading data
 
 ```{r}
-# opening a file from a url (file in Excel), name it 'fragility23'
-linkGit="https://github.com/DACSS-Fundamentals/overview/raw/refs/heads/main/FSI-2023-DOWNLOAD.xlsx"
+linkGit="https://github.com/DACSS-Fundamentals/overview/raw/refs/heads/main/FSI-2023-DOWNLOAD.xlsx" ## code to request a file from a specific link
 
-# library(rio) # package needed
-fragility23=rio::import(file = linkGit) #object that will hold the result
+fragility23=rio::import(file = linkGit) ## code to use the package rio, import the file above and name it 'fragility23'
 ```
 
 ```{r}
-str(fragility23)
+str(fragility23) ## code requests the data structure of 'fragility23' to see the types of data in each column
 ```
 
 ## Apply square root function?
 
 ```{r}
-# whole DF?
-sqrt(fragility23)
+sqrt(fragility23) ## code can't apply the square root function to the entire data frame in R
 ```
 
 ```{r}
-# several columns (only numerical)
-
-sqrt(fragility23[,4:5])
+sqrt(fragility23[,4:5]) ## code requests the square root of all the values in columns 4 and 5 to show individual output values
 ```
 
 ```{r}
-# one column
-sqrt(fragility23$Total)
+sqrt(fragility23$Total) ## code requests the square root of each value in the total column 
 ```
 
 ```{r}
-# one value
-sqrt(fragility23$Total[1])
+sqrt(fragility23$Total[1]) ## code requests the square root of the first value in the total column
 ```
 
 ## Applying **sum()**:
 
 ```{r}
-# sum everything
-sum(fragility23[,4:5])
+sum(fragility23[,4:5]) ## code requests the sum of all values in column 4 and 5
 ```
 
 ```{r}
-# sum by column
-print(apply(fragility23[,4:5],2,sum))
+print(apply(fragility23[,4:5],2,sum)) ## code requests the sum of all values in each column 4 and 5 to show as separate totals
 ```
 
 ```{r}
-#notice
-typeof(apply(fragility23[,4:5],2,sum))
+typeof(apply(fragility23[,4:5],2,sum)) ## code requests the data type of the sums of the values in columns 4 and 5. Since it says 'double' and not list, it is a vector
 ```
 
 If you do not see **list**, then it is a vector. ⏫
