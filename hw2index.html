@@ -909,15 +909,12 @@ class tells how R treats the object</p>
 <pre class="r"><code>typeof(sapply(fragility23[,4:5],sqrt)) ## added this one for myself to see the difference between &#39;typeof&#39; and &#39;class&#39; for apply to compare to sapply and lapply</code></pre>
 <pre><code>## [1] &quot;double&quot;</code></pre>
 <p>Now our own function:</p>
-</div>
-</div>
-<div id="for-each-function-i-started-by-trying-to-breakdown-the-code-and-make-sense-of-what-it-was-asking-me.-for-the-first-function-i-think-i-completed-the-function-but-i-may-have-taken-the-long-way-or-added-unecessary-steps.-for-the-second-function-i-got-stuck-in-the-middle.-im-not-sure-what-its-asking-me-but-i-wrote-down-as-much-of-my-thinking-as-i-could-in-the-code-breakdown." class="section level2">
-<h2>For each function, I started by trying to breakdown the code and
-make sense of what it was asking me. For the first function, I think I
+<p>For each function, I started by trying to breakdown the code and make
+sense of what it was asking me. For the first function, I think I
 completed the function but I may have taken the long way or added
 unecessary steps. For the second function, I got stuck in the middle.
 I’m not sure what it’s asking me but I wrote down as much of my thinking
-as I could in the code breakdown.</h2>
+as I could in the code breakdown.</p>
 <pre class="r"><code>theOnesOK = function(DF_country_and_variable) {
   variable_values &lt;- DF_country_and_variable[,2]
   avg_value &lt;- mean(variable_values, na.rm = TRUE)
@@ -925,16 +922,14 @@ as I could in the code breakdown.</h2>
   DF_country_and_variable$Status &lt;- is_above
   return(DF_country_and_variable)
 }</code></pre>
-</div>
-<div id="code-breakdown---the-function-is-happening-on-the-data-frame-of-columns-country-and-variable---the-variable-is-s1-demographic-pressures---i-created-a-new-file-with-only-two-columns-and-renamed-the-columns---to-find-the-mean-we-need-to-do-a-statistical-description---the-mean-is-5.956---created-a-new-column-to-show-tf-of-being-below-or-atabove-average-then-changing-the-labels-in-each-cells---lastly-need-the-return-function" class="section level2">
-<h2>Code breakdown - the function is happening on the data frame of
+<p>Code breakdown - the function is happening on the data frame of
 columns ‘country’ and ‘variable’ - the variable is ‘S1: Demographic
 Pressures’ - I created a new file with only two columns and renamed the
 columns - to find the mean, we need to do a statistical description -
 the mean is 5.956 - Created a new column to show T/F of being below or
 at/above average then changing the labels in each cells - lastly need
-the return function</h2>
-<p>** Need to alter to include the if, else aspect **</p>
+the return function ** Need to alter to include the if, else aspect
+**</p>
 <pre class="r"><code>theOnesOK=(fragility23[,c(&#39;Country&#39;,&#39;S1: Demographic Pressures&#39;)]) ## code creates new file titled theOnesOK and includes only 2 columns: &#39;country&#39; and &#39;S1 Demographic Pressures&#39;</code></pre>
 <pre class="r"><code>grep(pattern = &quot;Country|S1: Demographic Pressures&quot;,x = names(theOnesOK),fixed = F,value = T) ## code used to test the column names in the new file</code></pre>
 <pre><code>## [1] &quot;Country&quot;                   &quot;S1: Demographic Pressures&quot;</code></pre>
@@ -971,8 +966,8 @@ theOnesOK=fragility23[,keep] ## code used to create a new data frame</code></pre
 <pre class="r"><code>theOnesOK$status=theOnesOK$S1&lt;=avg_value ## code requests a new column be made and named &#39;status&#39; based on the value of column &#39;S1&#39; and it&#39;s comparison to the mean. It says that any value in &#39;S1&#39; that is less than or equal to the &#39;avg_value&#39; of the mean is TRUE and any value that is above the mean is FALSE</code></pre>
 <pre class="r"><code>theOnesOK$status[theOnesOK$status==&#39;FALSE&#39;]=&quot;Above Average&quot;
 theOnesOK$status[theOnesOK$status==&#39;TRUE&#39;]=&quot;Below/At Average&quot; ## in column &#39;status&#39; the code requests that the values are replaced in the following way... FALSE as &quot;Above Average&quot; and TRUE as Below/At Average</code></pre>
-<p><strong>I tried to do an if/else statement as an alternative to the
-code in lines 182-183 but I couldn’t figure it out.</strong></p>
+<p>I tried to do an if/else statement as an alternative to the code in
+lines 182-183 but I couldn’t figure it out.**</p>
 <p><strong>New function</strong></p>
 <pre class="r"><code>mystery=function(DF,positionsToUse,CountryColumn=&#39;Country&#39;){
   newDF=DF[,c(CountryColumn),drop = FALSE]
@@ -983,15 +978,13 @@ code in lines 182-183 but I couldn’t figure it out.</strong></p>
 <p>DF:[4:6],1 New column - average? Just a data frame with the country
 and average but the average of what? Should use the apply function
 somehow</p>
-</div>
-<div id="code-breakdown---the-function-is-asking-for-a-new-data-frame-newdf-of-columns-4-to-6-and-the-country-column---arguments-are-df-positionstouse-and-country-the-rest-is-the-function-body-its-asking-for-the-average-but-it-wouldnt-make-sense-to-ask-for-the-average-of-the-country-column-since-its-characters.-im-not-sure-what-the-positions-to-use-are-referencing-but-maybe-the-columns-1456---does-the-1-in-line-198-represent-a-row--" class="section level2">
-<h2>Code breakdown - the function is asking for a new data frame
-(newDF?) of columns 4 to 6 and the country column - arguments are ‘DF’,
+<p>Code breakdown - the function is asking for a new data frame (newDF?)
+of columns 4 to 6 and the country column - arguments are ‘DF’,
 ‘positionsToUse’, and ‘country’, the rest is the function body; it’s
 asking for the average but it wouldn’t make sense to ask for the average
 of the country column since it’s characters. I’m not sure what the
 ‘positions to use’ are referencing but maybe the columns (1,4,5,6?) -
-Does the 1 in line 198 represent a row? -</h2>
+Does the 1 in line 198 represent a row? -</p>
 <pre class="r"><code>mystery=(fragility23[,c(1,4:6)]) ## code creates a new data frame called &#39;mystery&#39; with columns 1, 4, 5, and 6</code></pre>
 <pre class="r"><code>grep(pattern = &quot;Country|Total|S1: Demographic Pressures|S2: Refugees and IDPs&quot;,x = names(mystery),fixed = F,value = T) ## code used to test the column names in the new file</code></pre>
 <pre><code>## [1] &quot;Country&quot;                   &quot;Total&quot;                    
@@ -1000,7 +993,7 @@ Does the 1 in line 198 represent a row? -</h2>
 mystery=fragility23[,keep] ## code used to create a new data frame</code></pre>
 <pre class="r"><code>names(mystery)[3]=c(&quot;S1&quot;)
 names(mystery)[4]=c(&quot;S2&quot;) ## Code changes the name of column 3 and 4</code></pre>
-<p><strong>Not sure how I would do the above in one line</strong></p>
+<p>Not sure how I would do the above in one line</p>
 <pre class="r"><code>summary(mystery) ## code requests a statistical description of the columns</code></pre>
 <pre><code>##    Country              Total              S1               S2        
 ##  Length:179         Min.   : 14.50   Min.   : 1.100   Min.   : 0.500  
@@ -1009,6 +1002,7 @@ names(mystery)[4]=c(&quot;S2&quot;) ## Code changes the name of column 3 and 4</
 ##                     Mean   : 65.83   Mean   : 5.956   Mean   : 4.764  
 ##                     3rd Qu.: 82.20   3rd Qu.: 8.050   3rd Qu.: 6.450  
 ##                     Max.   :111.90   Max.   :10.000   Max.   :10.000</code></pre>
+</div>
 </div>
 </div>
 

@@ -121,7 +121,7 @@ typeof(sapply(fragility23[,4:5],sqrt)) ## added this one for myself to see the d
 
 Now our own function:
 
-## For each function, I started by trying to breakdown the code and make sense of what it was asking me. For the first function, I think I completed the function but I may have taken the long way or added unecessary steps. For the second function, I got stuck in the middle. I'm not sure what it's asking me but I wrote down as much of my thinking as I could in the code breakdown.
+For each function, I started by trying to breakdown the code and make sense of what it was asking me. For the first function, I think I completed the function but I may have taken the long way or added unecessary steps. For the second function, I got stuck in the middle. I'm not sure what it's asking me but I wrote down as much of my thinking as I could in the code breakdown.
 
 ```{r}
 theOnesOK = function(DF_country_and_variable) {
@@ -133,7 +133,7 @@ theOnesOK = function(DF_country_and_variable) {
 }
 ```
 
-## Code breakdown - the function is happening on the data frame of columns  'country' and 'variable' - the variable is 'S1: Demographic Pressures' - I created a new file with only two columns and renamed the columns - to find the mean, we need to do a statistical description - the mean is 5.956 - Created a new column to show T/F of being below or at/above average then changing the labels in each cells - lastly need the return function 
+Code breakdown - the function is happening on the data frame of columns  'country' and 'variable' - the variable is 'S1: Demographic Pressures' - I created a new file with only two columns and renamed the columns - to find the mean, we need to do a statistical description - the mean is 5.956 - Created a new column to show T/F of being below or at/above average then changing the labels in each cells - lastly need the return function 
 ** Need to alter to include the if, else aspect **
 
 ```{r}
@@ -173,7 +173,7 @@ theOnesOK$status[theOnesOK$status=='FALSE']="Above Average"
 theOnesOK$status[theOnesOK$status=='TRUE']="Below/At Average" ## in column 'status' the code requests that the values are replaced in the following way... FALSE as "Above Average" and TRUE as Below/At Average
 ```
 
-**I tried to do an if/else statement as an alternative to the code in lines 182-183 but I couldn't figure it out.**
+I tried to do an if/else statement as an alternative to the code in lines 182-183 but I couldn't figure it out.**
 
 **New function**
 
@@ -190,8 +190,7 @@ DF:[4:6],1
 New column - average? Just a data frame with the country and average but the average of what? 
 Should use the apply function somehow
 
-
-## Code breakdown - the function is asking for a new data frame (newDF?) of columns 4 to 6 and the country column - arguments are 'DF', 'positionsToUse', and 'country', the rest is the function body; it's asking for the average but it wouldn't make sense to ask for the average of the country column since it's characters. I'm not sure what the 'positions to use' are referencing but maybe the columns (1,4,5,6?) - Does the 1 in line 198 represent a row? - 
+Code breakdown - the function is asking for a new data frame (newDF?) of columns 4 to 6 and the country column - arguments are 'DF', 'positionsToUse', and 'country', the rest is the function body; it's asking for the average but it wouldn't make sense to ask for the average of the country column since it's characters. I'm not sure what the 'positions to use' are referencing but maybe the columns (1,4,5,6?) - Does the 1 in line 198 represent a row? - 
 
 ```{r}
 mystery=(fragility23[,c(1,4:6)]) ## code creates a new data frame called 'mystery' with columns 1, 4, 5, and 6
@@ -211,7 +210,7 @@ names(mystery)[3]=c("S1")
 names(mystery)[4]=c("S2") ## Code changes the name of column 3 and 4
 ```
 
-**Not sure how I would do the above in one line**
+Not sure how I would do the above in one line
 
 ```{r}
 summary(mystery) ## code requests a statistical description of the columns
