@@ -1,0 +1,236 @@
+---
+title: An R Markdown document converted from "copy_of_DataFrames_R.ipynb"
+output: html_document
+---
+
+
+
+# DATA FRAMES in R
+
+## 1. Creating
+
+```{r}
+# columns as vectors
+namesR=c("Qing", "Françoise", "Raúl", "Bjork","Marie")
+agesR=c(32,33,28,30,29)
+countryR=c("China", "Senegal", "España", "Norway","Korea")
+educationR=c("Bach", "Bach", "Master", "PhD","PhD")
+
+# a 'named' list of vectors
+classroomR=list(student=namesR,age=agesR,edu=educationR,country=countryR)
+
+# from list to dataframe
+studentsR=data.frame(classroomR)
+
+# here you are
+studentsR
+```
+
+## 2. Accessing
+
+Here you want to SEE:
+
+```{r}
+# the whole first column
+studentsR[,1] # "" means 'all' (here rows).
+```
+
+```{r}
+# the  column 'student'
+studentsR$student # one column in R (use $)
+```
+
+```{r}
+# the  column 'student'
+studentsR[,'student'] # using []
+```
+
+```{r}
+# more than one column  using indices in a vector
+studentsR[,c(2,3)]
+```
+
+```{r}
+# more than one column  using column names in a vector
+studentsR[,c('student','edu')]
+```
+
+```{r}
+studentsR[3,'student'] # you would get a cell value
+```
+
+```{r}
+studentsR[c(3,5),c('student','edu')]
+```
+
+## 3. Replacing
+
+```{r}
+# one value
+studentsR[3,'student']='Lito'
+studentsR
+```
+
+```{r}
+# more than one value
+studentsR[c(3,5),'age']=c(32,31)
+studentsR
+```
+
+## 4. Deleting
+
+```{r}
+# make copy - to delete elements
+studentsR_new=studentsR
+```
+
+### Deleting rows
+
+```{r}
+byeRows=c(3,4)
+
+studentsR_new=studentsR_new[-byeRows,] # rewriting
+
+#then
+studentsR_new
+```
+
+As you see, the indexes dissapeared. Then, you should reset the indexes:
+
+```{r}
+#reset indexes
+row.names(studentsR_new)=NULL
+
+#then
+studentsR_new
+```
+
+### Deleting columns
+
+```{r}
+# This is what you want to get rid of:
+byeColumns=c('edu')
+
+#### this doesn't work:
+# studentsR_new[,-byeColumns]
+
+# alternative : keep instead of drop
+keepCols=setdiff(names(studentsR_new),byeColumns)
+
+studentsR_new=studentsR_new[,keepCols]
+
+#then
+studentsR_new
+```
+
+### Deleting cells
+
+```{r}
+studentsR_new[3,'country']=NA
+
+#then
+studentsR_new
+```
+
+## Inserting
+
+### Inserting Columns:
+
+```{r}
+femaleR=c(T,T,F,F,T)
+studentsR1=cbind(studentsR,female=femaleR)
+# studentsR1$female=femaleR
+# studentsR1[,'female']=femaleR
+studentsR1
+```
+
+### Inserting Rows:
+
+```{r}
+studentsR
+```
+
+```{r}
+newStudent=list('Bob',33,'Bach','Peru',FALSE)
+studentsR1=rbind(studentsR,newStudent)
+
+# notice FALSE is dropped
+studentsR1
+```
+
+```{r}
+newStudent=c('Bob',33,'Bach','Peru',FALSE)
+studentsR1=rbind(studentsR,newStudent)
+
+# notice coercion
+studentsR1
+```
+
+## Other basic operations
+
+```{r}
+summary(studentsR)
+```
+
+```{r}
+summary(studentsR1)
+```
+
+```{r}
+class(studentsR)
+```
+
+```{r}
+# details of data frame
+str(studentsR)
+```
+
+```{r}
+# number of rows and columns
+
+dim(studentsR)
+```
+
+```{r}
+# number of rows:
+
+length(studentsR)
+```
+
+```{r}
+# first rows
+head(studentsR,2) # compare with: tail(studentsR,2)
+```
+
+```{r}
+# names of variables
+names(studentsR)
+```
+
+```{r}
+# names in rows
+rownames(studentsR)
+```
+
+# Check some basic operations
+
+```{r}
+x <- factor(c("M", "F", "M", "F"))
+```
+
+```{r}
+x
+```
+
+```{r}
+str(x) #gives you?
+```
+
+```{r}
+typeof(x) #gives you?
+```
+
+```{r}
+class(x) #gives you?
+```
+

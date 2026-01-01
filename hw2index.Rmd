@@ -5,12 +5,6 @@ output: html_document
 
 # Applying functions in R
 
-Installing to read Excel files:
-
-```{r}
-install.packages('rio') ## code requests installing the package 'rio'
-```
-
 # reading data
 
 ```{r}
@@ -23,11 +17,7 @@ fragility23=rio::import(file = linkGit) ## code to use the package rio, import t
 str(fragility23) ## code requests the data structure of 'fragility23' to see the types of data in each column
 ```
 
-## Apply square root function?
-
-```{r}
-sqrt(fragility23) ## code can't apply the square root function to the entire data frame in R
-```
+## Apply square root function? - Can't apply it to the entire data frame in R
 
 ```{r}
 sqrt(fragility23[,4:5]) ## code requests the square root of all the values in columns 4 and 5 to show individual output values
@@ -47,6 +37,9 @@ sqrt(fragility23$Total[1]) ## code requests the square root of the first value i
 sum(fragility23[,4:5]) ## code requests the sum of all values in column 4 and 5
 ```
 
+**Question: I know that 2 requests a column below, but why isn't there a 2 in the code above?**
+**Potential answer: I think it defaults to columns if nothing is explicitly stated. 
+
 ```{r}
 print(apply(fragility23[,4:5],2,sum)) ## code requests the sum of all values in each column 4 and 5 to show as separate totals
 ```
@@ -55,58 +48,80 @@ print(apply(fragility23[,4:5],2,sum)) ## code requests the sum of all values in 
 typeof(apply(fragility23[,4:5],2,sum)) ## code requests the data type of the sums of the values in columns 4 and 5. Since it says 'double' and not list, it is a vector
 ```
 
+```{r}
+class(apply(fragility23[,4:5],2,sum)) ## added this one for myself to see the difference between 'typeof' and 'class' for apply to compare to sapply and lapply
+```
+
 If you do not see **list**, then it is a vector. ⏫
 
 ```{r}
-# sum by row
-print(apply(fragility23[,4:5],1,sum))
+print(apply(fragility23[,4:5],1,sum)) ## code requests the sum of the values in each row 
 ```
+
+**Question: When summing the rows, will the characters interfere?**
+**Potential answer: No, there isn't an error showing so I don't think so.**
 
 ### Apply by iterating:
 
 ```{r}
-print(lapply(fragility23[,4:5],sum))
+print(lapply(fragility23[,4:5],sum)) ## code requests the sum for each of the columns 4 and 5 to get a list instead of vectors; can only compute by column
 ```
 
 Notice output of **lapply**:
 
 ```{r}
-typeof(lapply(fragility23[,4:5],sum))
+typeof(lapply(fragility23[,4:5],sum)) ## code requests the data type of the sums for each of the columns, lapply gives us a list
 ```
 
 ```{r}
-class(lapply(fragility23[,4:5],sum))
+class(lapply(fragility23[,4:5],sum)) ## code requests the data class of the sums for each of the columns, lapply gives us a list
 ```
+
+**Question: typeof and class give the same information, correct?** **Answer: typeof tells how the object is stored and class tells how R treats the object
 
 Notice output of **sapply**:
 
 ```{r}
-print(sapply(fragility23[,4:5],sum))
+print(sapply(fragility23[,4:5],sum)) ## code requests the sum of all values in each column 4 and 5 to show as separate totals; looks very similar to 'apply' function but gives 
 ```
 
 ```{r}
-class(sapply(fragility23[,4:5],sum))
+typeof(sapply(fragility23[,4:5],sum)) ## added this one for myself to see the difference between 'typeof' and 'class' for apply to compare to sapply and lapply
+```
+
+```{r}
+class(sapply(fragility23[,4:5],sum)) ## code requests the data class of the sums for each of the columns 4 and 5
 ```
 
 Similarly:
 
 ```{r}
-print(lapply(fragility23[,4:5],sqrt))
+print(lapply(fragility23[,4:5],sqrt)) ## code requests the square root of each values in columns 4 and 5
 ```
 
 ```{r}
-class(lapply(fragility23[,4:5],sqrt))
+class(lapply(fragility23[,4:5],sqrt)) ## code requests the data class of the square root values and comes out with a list
 ```
 
 ```{r}
-print(sapply(fragility23[,4:5],sqrt))
+typeof(lapply(fragility23[,4:5],sqrt)) ## added this one for myself to see the difference between 'typeof' and 'class' for apply to compare to sapply and lapply
 ```
 
 ```{r}
-class(sapply(fragility23[,4:5],sqrt))
+print(sapply(fragility23[,4:5],sqrt)) ## code requests the square root of each of the values in columns 4 and 5
+```
+
+```{r}
+class(sapply(fragility23[,4:5],sqrt)) ## code requests the data class of the square root values and comes out with a matrix or array
+```
+
+```{r}
+typeof(sapply(fragility23[,4:5],sqrt)) ## added this one for myself to see the difference between 'typeof' and 'class' for apply to compare to sapply and lapply
 ```
 
 Now our own function:
+
+## For each function, I started by trying to breakdown the code and make sense of what it was asking me. For the first function, I think I completed the function but I may have taken the long way or added unecessary steps. For the second function, I got stuck in the middle. I'm not sure what it's asking me but I wrote down as much of my thinking as I could in the code breakdown.
 
 ```{r}
 theOnesOK = function(DF_country_and_variable) {
@@ -118,9 +133,49 @@ theOnesOK = function(DF_country_and_variable) {
 }
 ```
 
+## Code breakdown - the function is happening on the data frame of columns  'country' and 'variable' - the variable is 'S1: Demographic Pressures' - I created a new file with only two columns and renamed the columns - to find the mean, we need to do a statistical description - the mean is 5.956 - Created a new column to show T/F of being below or at/above average then changing the labels in each cells - lastly need the return function 
+** Need to alter to include the if, else aspect **
+
 ```{r}
-theOnesOK(fragility23[,c('Country','S1: Demographic Pressures')])
+theOnesOK=(fragility23[,c('Country','S1: Demographic Pressures')]) ## code creates new file titled theOnesOK and includes only 2 columns: 'country' and 'S1 Demographic Pressures'
 ```
+
+```{r}
+grep(pattern = "Country|S1: Demographic Pressures",x = names(theOnesOK),fixed = F,value = T) ## code used to test the column names in the new file
+```
+
+```{r}
+keep=grep("Country|S1: Demographic Pressures",names(fragility23),fixed = F,value = T)
+theOnesOK=fragility23[,keep] ## code used to create a new data frame
+```
+
+```{r}
+names(theOnesOK)[2]=c("S1") ## Code changes the name of column 2
+```
+
+```{r}
+summary(theOnesOK) ## code requests a statistical summary of the0inesOK, it's really only for S1 column 
+```
+
+```{r}
+avg_value=mean(x = theOnesOK$S1,
+             probs = 5.956,
+             na.rm = TRUE) ## code requests the storage of the information that the S1_mean is a value of 5.956
+```
+
+```{r}
+theOnesOK$S1<=avg_value
+theOnesOK$status=theOnesOK$S1<=avg_value ## code requests a new column be made and named 'status' based on the value of column 'S1' and it's comparison to the mean. It says that any value in 'S1' that is less than or equal to the 'avg_value' of the mean is TRUE and any value that is above the mean is FALSE
+```
+
+```{r}
+theOnesOK$status[theOnesOK$status=='FALSE']="Above Average"
+theOnesOK$status[theOnesOK$status=='TRUE']="Below/At Average" ## in column 'status' the code requests that the values are replaced in the following way... FALSE as "Above Average" and TRUE as Below/At Average
+```
+
+**I tried to do an if/else statement as an alternative to the code in lines 182-183 but I couldn't figure it out.**
+
+**New function**
 
 ```{r}
 mystery=function(DF,positionsToUse,CountryColumn='Country'){
@@ -131,7 +186,33 @@ mystery=function(DF,positionsToUse,CountryColumn='Country'){
 }
 ```
 
+DF:[4:6],1
+New column - average? Just a data frame with the country and average but the average of what? 
+Should use the apply function somehow
+
+
+## Code breakdown - the function is asking for a new data frame (newDF?) of columns 4 to 6 and the country column - arguments are 'DF', 'positionsToUse', and 'country', the rest is the function body; it's asking for the average but it wouldn't make sense to ask for the average of the country column since it's characters. I'm not sure what the 'positions to use' are referencing but maybe the columns (1,4,5,6?) - Does the 1 in line 198 represent a row? - 
+
 ```{r}
-mystery(fragility23,4:6)
+mystery=(fragility23[,c(1,4:6)]) ## code creates a new data frame called 'mystery' with columns 1, 4, 5, and 6
 ```
 
+```{r}
+grep(pattern = "Country|Total|S1: Demographic Pressures|S2: Refugees and IDPs",x = names(mystery),fixed = F,value = T) ## code used to test the column names in the new file
+```
+
+```{r}
+keep=grep("Country|Total|S1: Demographic Pressures|S2: Refugees and IDPs",names(fragility23),fixed = F,value = T)
+mystery=fragility23[,keep] ## code used to create a new data frame
+```
+
+```{r}
+names(mystery)[3]=c("S1")
+names(mystery)[4]=c("S2") ## Code changes the name of column 3 and 4
+```
+
+**Not sure how I would do the above in one line**
+
+```{r}
+summary(mystery) ## code requests a statistical description of the columns
+```

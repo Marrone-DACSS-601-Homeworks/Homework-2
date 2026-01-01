@@ -1,0 +1,222 @@
+---
+title: An R Markdown document converted from "copy_of_VectorsIn_R.ipynb"
+output: html_document
+---
+
+# **VECTORS in R**
+
+## 1. Creating
+
+- You use **c()** to create a vector
+- Every vector element should share the **same data type**
+
+```{r}
+# creating 5 vector
+
+namesR=c("Qing", "Françoise", "Raúl", "Bjork","Marie")
+agesR=c(32,33,28,30,29)
+countryR=c("China", "Senegal", "España", "Norway","Korea")
+educationR=c("Bach", "Bach", "Master", "PhD","PhD")
+```
+
+```{r}
+namesR
+```
+
+## 2. Accessing
+
+The vector is a **container**. Accessing means **seeing** *one* or *several* values, seeing a value changes nothing in the vector.
+
+```{r}
+# one value
+agesR[1]
+```
+
+```{r}
+# several
+agesR[c(1,3)]
+```
+
+### Slicing
+
+You use the **:** to request some values:
+
+```{r}
+# consecutive
+agesR[2:4]
+# agesR[seq(2,4)]
+```
+
+```{r}
+# non consecutive - but with a pattern
+agesR[seq(1,4,2)]
+```
+
+** Not sure what the sequence is or the pattern **
+
+## Replacing
+
+Here the list will change some contents, but the **amount** of elements stays the same.
+
+### by Position
+
+We tell the location, or **index**, of the element to change:
+
+```{r}
+# remember: countryR=c("China", "Senegal", "España", "Norway","Korea")
+
+countryR[3]="Spain"
+
+# list changed:
+countryR
+```
+
+### By Value
+
+We find a match to a current value, and update it with different one:
+
+```{r}
+countryR[countryR=='China']="PR China"
+countryR
+```
+
+## Deleting
+
+Here the vector will shrink.
+
+Notice we are rewriting the same object:
+
+### By Position
+
+```{r}
+# if we have countryR=c('PR China','Senegal','España','Norway','Korea')
+
+#this is a VIEW
+countryR[-5] # bye Korea
+```
+
+```{r}
+# Korea still there?
+countryR
+```
+
+```{r}
+# this is rewriting
+countryR=countryR[-5]
+
+# vector object rewritten
+countryR
+```
+
+We can delete more than one position:
+
+```{r}
+vectorR=c(1,2,3,4,5,6,100,10000) #new vector created
+
+vectorR=vectorR[-c(2:4)]
+
+#now:
+vectorR
+```
+
+You can **filter** instead of deleting:
+
+```{r}
+# non consecutive
+
+vectorR=c(11,22,33,44,55,66) #new vector created
+
+new_vectorR=vectorR[-c(2,4,6)] #another new vector created
+#now
+new_vectorR
+```
+
+```{r}
+#remains intact
+vectorR
+```
+
+### by Value
+
+```{r}
+#one value
+
+vectorR=c(1,3,45,3,3) #new vector created
+
+vectorR=vectorR[vectorR!=3]
+
+#then
+vectorR
+```
+
+Notice the use of **%in%**:
+
+
+```{r}
+#several values
+
+vectorR=c(1,3,45,3,3)#new vector created
+
+vectorR=vectorR[!vectorR%in%c(1,45)]
+vectorR
+```
+
+## Inserting values
+
+Vector will become larger:
+
+### at the End
+
+```{r}
+vectorR=c(1,2,3,4) #new vector created
+
+vectorR=c(vectorR,5)
+
+# now
+vectorR
+```
+
+### in a particular location
+
+```{r}
+vectorR=c(1,2,3,4) #new vector created
+
+vectorR=append(vectorR,10,after=1)
+
+# now
+vectorR
+```
+
+## Concatenating
+
+```{r}
+vectorR1=c(1,2,3,4) #new vector created
+vectorR2=c('a','b') #another new vector created
+```
+
+This creates a new vector:
+
+```{r}
+#another new vector created
+vectorR12=c(vectorR1,vectorR2)
+
+# now
+vectorR12
+```
+
+This make one vector grow larger:
+
+```{r}
+vectorR1=c(vectorR1,vectorR2)
+
+# now
+vectorR1
+```
+
+Remember that vectors support just one data type, and coercion will activate when different data types are detected.
+
+```{r}
+vectorR1=c(1,2,3,4,"o")
+vectorR1
+```
+

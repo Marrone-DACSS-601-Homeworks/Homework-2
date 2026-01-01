@@ -1,0 +1,88 @@
+---
+title: An R Markdown document converted from "Copy_of_coercion_in_R.ipynb"
+output: html_document
+---
+
+
+# Coercion in R
+
+## 1. Case of **logical** values
+
+```{r}
+typeof(c(TRUE,F, FALSE, F,T))
+```
+
+```{r}
+typeof(c(TRUE,F, FALSE, F,T,1L))
+```
+
+** Why is 1L an integer? ** 
+
+```{r}
+typeof(c(TRUE,F, FALSE, F,T,1))
+```
+** But 1 is a double? which is also an integer? **
+
+```{r}
+typeof(c(TRUE,F, FALSE, F,T,3.5))
+```
+
+```{r}
+typeof(c(TRUE,F, FALSE, F,T,"PETER"))
+```
+
+## 2. Case of **integer** values
+
+```{r}
+x=as.integer(c(1,2,3))
+print(x)
+```
+
+```{r}
+typeof(x)
+```
+
+```{r}
+typeof(c(x,F))
+```
+
+```{r}
+typeof(c(x,4))
+```
+
+```{r}
+typeof(c(x,'pi'))
+```
+
+## 3. Case of **real** values
+
+```{r}
+
+r=c(3.321456,444.55667,5.121213,200.25)
+typeof(r)
+```
+
+```{r}
+typeof(c(r,FALSE))
+```
+
+```{r}
+typeof(c(r,23L))
+```
+
+```{r}
+typeof(c(r,'FALSE'))
+```
+
+```{r}
+y=c(1,0,2,34,67,3000000,1L,'a')
+```
+
+```{r}
+y
+```
+
+```{r}
+typeof(y)
+```
+
