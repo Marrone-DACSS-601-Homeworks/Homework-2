@@ -8,6 +8,7 @@ output: html_document
 ## One Input, One Ouput
 
 
+
 This is the model:
 
 
@@ -39,7 +40,7 @@ length(strsplit(word, split = "")[[1]])
 Using the function based on model:
 
 ```{r}
-countCharacter('peru')
+countCharacter('peru')[[1]]
 ```
 
 Compare with:
@@ -77,7 +78,7 @@ nameofFunction= function(OneInput){
 ```
 
 ```{r}
-# install.packages("textcat")
+install.packages("textcat")
 ```
 
 ```{r}
