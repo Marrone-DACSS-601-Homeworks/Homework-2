@@ -1,0 +1,170 @@
+---
+title: An R Markdown document converted from "copy_of_functions_in_R.ipynb"
+output: html_document
+---
+
+#Functions in R
+
+## One Input, One Ouput
+
+
+This is the model:
+
+
+```
+nameofFunction= function(OneInput){
+
+                internal execution
+
+                output}
+```
+
+
+The model into code:
+
+```{r}
+countCharacter =  function(text){ # read a text
+                  listOfCharacters=strsplit(text, split = "") # text into list characters
+                  vectorOfCharacters=listOfCharacters[[1]] # list of characters as vector
+                  #return(length(vectorOfCharacters))
+                  length(vectorOfCharacters) # returning count of characters in text
+}
+```
+
+```{r}
+word='peru'
+length(strsplit(word, split = "")[[1]])
+```
+
+Using the function based on model:
+
+```{r}
+countCharacter('peru')
+```
+
+Compare with:
+
+```{r}
+# how readable is this?
+'peru'|>strsplit(split = "")|>(\(x) x[[1]])()|>length()
+```
+
+However:
+
+```{r}
+nchar('peru and usa') # R had one already!
+```
+
+```{r}
+countCharacter('peru and usa')
+```
+
+```{r}
+# this is local to the function
+# listOfCharacters
+```
+
+## One Input, several ouput
+
+This is the model:
+
+```
+nameofFunction= function(OneInput){
+
+                internal execution
+
+                return(output_Several)}
+```
+
+```{r}
+# install.packages("textcat")
+```
+
+```{r}
+InfoText =  function(text){
+
+                  textLanguage=textcat::textcat(text)
+                  output=list(language=textLanguage,
+                              counts=countCharacter(text))
+
+                  return(output)
+}
+```
+
+```{r}
+InfoText('Esta es una frase en español')
+```
+
+```{r}
+InfoText('This is an English sentence')
+```
+
+## Several input, One output
+
+This is the model:
+
+```
+nameofFunction= function(Input_Several){
+
+                internal execution
+
+                output}
+```
+
+```{r}
+raiseTheNum=function(aNumber, thePower=2){ #notice default
+  aNumber^thePower
+
+}
+```
+
+```{r}
+raiseTheNum(4)
+```
+
+```{r}
+raiseTheNum(4,0.5)
+```
+
+```{r}
+raiseTheNum(thePower = 0.5,4)
+```
+
+```{r}
+raiseTheNum(0.5,4)
+```
+
+## Several input, Several output
+
+```
+nameofFunction= function(Input_Several){
+
+                internal execution
+
+                return(output_Several)}
+```
+
+```{r}
+giveMeStats= function(numerator,denominator){
+
+                theSum=numerator+denominator
+                theDiff=numerator-denominator
+                theProduct=numerator*denominator
+                theDivision=numerator/denominator
+
+                output=list(sum=theSum,
+                            diff=theDiff,
+                            product=theProduct,
+                            division=theDivision)
+
+                return(output)}
+```
+
+```{r}
+giveMeStats(4,8) # order matches argument names!
+```
+
+```{r}
+giveMeStats(denominator = 4,8) # order does not matter if argument names are explicit!
+```
+

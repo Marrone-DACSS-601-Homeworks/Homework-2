@@ -598,10 +598,7 @@ frame in R</h2>
 <h2>Applying <strong>sum()</strong>:</h2>
 <pre class="r"><code>sum(fragility23[,4:5]) ## code requests the sum of all values in column 4 and 5</code></pre>
 <pre><code>## [1] 12850.1</code></pre>
-<p><strong>Question: I know that 2 requests a column below, but why
-isn’t there a 2 in the code above?</strong> **Potential answer: I think
-it defaults to columns if nothing is explicitly stated.</p>
-<pre class="r"><code>print(apply(fragility23[,4:5],2,sum)) ## code requests the sum of all values in each column 4 and 5 to show as separate totals</code></pre>
+<pre class="r"><code>apply(fragility23[,4:5],2,sum) ## code requests the sum of all values in each column 4 and 5 to show as separate totals</code></pre>
 <pre><code>##                     Total S1: Demographic Pressures 
 ##                   11784.0                    1066.1</code></pre>
 <pre class="r"><code>typeof(apply(fragility23[,4:5],2,sum)) ## code requests the data type of the sums of the values in columns 4 and 5. Since it says &#39;double&#39; and not list, it is a vector</code></pre>
@@ -638,9 +635,6 @@ it defaults to columns if nothing is explicitly stated.</p>
 ##  37.8  36.7  34.0  35.6  36.4  31.9  30.9  29.7  28.0  26.9  28.0  25.8  23.5 
 ##   170   171   172   173   174   175   176   177   178   179 
 ##  23.6  21.9  22.3  20.1  20.2  20.2  17.8  17.7  17.2  15.9</code></pre>
-<p><strong>Question: When summing the rows, will the characters
-interfere?</strong> <strong>Potential answer: No, there isn’t an error
-showing so I don’t think so.</strong></p>
 <div id="apply-by-iterating" class="section level3">
 <h3>Apply by iterating:</h3>
 <pre class="r"><code>print(lapply(fragility23[,4:5],sum)) ## code requests the sum for each of the columns 4 and 5 to get a list instead of vectors; can only compute by column</code></pre>
@@ -654,9 +648,6 @@ showing so I don’t think so.</strong></p>
 <pre><code>## [1] &quot;list&quot;</code></pre>
 <pre class="r"><code>class(lapply(fragility23[,4:5],sum)) ## code requests the data class of the sums for each of the columns, lapply gives us a list</code></pre>
 <pre><code>## [1] &quot;list&quot;</code></pre>
-<p><strong>Question: typeof and class give the same information,
-correct?</strong> **Answer: typeof tells how the object is stored and
-class tells how R treats the object</p>
 <p>Notice output of <strong>sapply</strong>:</p>
 <pre class="r"><code>print(sapply(fragility23[,4:5],sum)) ## code requests the sum of all values in each column 4 and 5 to show as separate totals; looks very similar to &#39;apply&#39; function but gives </code></pre>
 <pre><code>##                     Total S1: Demographic Pressures 
@@ -909,99 +900,382 @@ class tells how R treats the object</p>
 <pre class="r"><code>typeof(sapply(fragility23[,4:5],sqrt)) ## added this one for myself to see the difference between &#39;typeof&#39; and &#39;class&#39; for apply to compare to sapply and lapply</code></pre>
 <pre><code>## [1] &quot;double&quot;</code></pre>
 <p>Now our own function:</p>
-<p>For each function, I started by trying to breakdown the code and make
-sense of what it was asking me. For the first function, I think I
-completed the function but I may have taken the long way or added
-unecessary steps. For the second function, I got stuck in the middle.
-I’m not sure what it’s asking me but I wrote down as much of my thinking
-as I could in the code breakdown.</p>
-<pre class="r"><code>theOnesOK = function(DF_country_and_variable) {
-  variable_values &lt;- DF_country_and_variable[,2]
-  avg_value &lt;- mean(variable_values, na.rm = TRUE)
-  is_above &lt;- ifelse(variable_values &gt; avg_value, &quot;Above Average&quot;, &quot;Below/At Average&quot;)
-  DF_country_and_variable$Status &lt;- is_above
-  return(DF_country_and_variable)
+<pre class="r"><code>theOnesOK = function(DF_country_and_variable) { # input of the function
+  variable_values &lt;- DF_country_and_variable[,2] # variable value is a column of information
+  avg_value &lt;- mean(variable_values, na.rm = TRUE) # find mean mean of the column and ignore missing values
+  is_above &lt;- ifelse(variable_values &gt; avg_value, &quot;Above Average&quot;, &quot;Below/At Average&quot;) # determine if each country&#39;s value is above average or below/at average
+  DF_country_and_variable$Status &lt;- is_above # create a &#39;status&#39; column to label each country with the status above
+  return(DF_country_and_variable) # return a data frame with 3 columns- country, S1 and status
 }</code></pre>
-<p>Code breakdown - the function is happening on the data frame of
-columns ‘country’ and ‘variable’ - the variable is ‘S1: Demographic
-Pressures’ - I created a new file with only two columns and renamed the
-columns - to find the mean, we need to do a statistical description -
-the mean is 5.956 - Created a new column to show T/F of being below or
-at/above average then changing the labels in each cells - lastly need
-the return function ** Need to alter to include the if, else aspect
-**</p>
-<pre class="r"><code>theOnesOK=(fragility23[,c(&#39;Country&#39;,&#39;S1: Demographic Pressures&#39;)]) ## code creates new file titled theOnesOK and includes only 2 columns: &#39;country&#39; and &#39;S1 Demographic Pressures&#39;</code></pre>
-<pre class="r"><code>grep(pattern = &quot;Country|S1: Demographic Pressures&quot;,x = names(theOnesOK),fixed = F,value = T) ## code used to test the column names in the new file</code></pre>
-<pre><code>## [1] &quot;Country&quot;                   &quot;S1: Demographic Pressures&quot;</code></pre>
-<pre class="r"><code>keep=grep(&quot;Country|S1: Demographic Pressures&quot;,names(fragility23),fixed = F,value = T)
-theOnesOK=fragility23[,keep] ## code used to create a new data frame</code></pre>
-<pre class="r"><code>names(theOnesOK)[2]=c(&quot;S1&quot;) ## Code changes the name of column 2</code></pre>
-<pre class="r"><code>summary(theOnesOK) ## code requests a statistical summary of the0inesOK, it&#39;s really only for S1 column </code></pre>
-<pre><code>##    Country                S1        
-##  Length:179         Min.   : 1.100  
-##  Class :character   1st Qu.: 4.100  
-##  Mode  :character   Median : 5.900  
-##                     Mean   : 5.956  
-##                     3rd Qu.: 8.050  
-##                     Max.   :10.000</code></pre>
-<pre class="r"><code>avg_value=mean(x = theOnesOK$S1,
-             probs = 5.956,
-             na.rm = TRUE) ## code requests the storage of the information that the S1_mean is a value of 5.956</code></pre>
-<pre class="r"><code>theOnesOK$S1&lt;=avg_value</code></pre>
-<pre><code>##   [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-##  [13] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-##  [25]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-##  [37] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-##  [49] FALSE FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-##  [61] FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE
-##  [73] FALSE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE
-##  [85] FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
-##  [97]  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE
-## [109]  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-## [121]  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-## [133]  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-## [145]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-## [157]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-## [169]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE</code></pre>
-<pre class="r"><code>theOnesOK$status=theOnesOK$S1&lt;=avg_value ## code requests a new column be made and named &#39;status&#39; based on the value of column &#39;S1&#39; and it&#39;s comparison to the mean. It says that any value in &#39;S1&#39; that is less than or equal to the &#39;avg_value&#39; of the mean is TRUE and any value that is above the mean is FALSE</code></pre>
-<pre class="r"><code>theOnesOK$status[theOnesOK$status==&#39;FALSE&#39;]=&quot;Above Average&quot;
-theOnesOK$status[theOnesOK$status==&#39;TRUE&#39;]=&quot;Below/At Average&quot; ## in column &#39;status&#39; the code requests that the values are replaced in the following way... FALSE as &quot;Above Average&quot; and TRUE as Below/At Average</code></pre>
-<p>I tried to do an if/else statement as an alternative to the code in
-lines 182-183 but I couldn’t figure it out.**</p>
+<pre class="r"><code>theOnesOK(fragility23[,c(&#39;Country&#39;,&#39;S1: Demographic Pressures&#39;)]) # code creates a list of information from &#39;fragility23&#39; that includes the columns of &#39;country&#39; and &#39;S1: Demographic Pressures&#39; and adds a third column that tells whether the country in above the mean or below/at the mean of S1: Demographic Pressures.</code></pre>
+<pre><code>##                       Country S1: Demographic Pressures           Status
+## 1                     Somalia                      10.0    Above Average
+## 2                       Yemen                       9.6    Above Average
+## 3                 South Sudan                       9.7    Above Average
+## 4   Congo Democratic Republic                       9.7    Above Average
+## 5                       Syria                       7.4    Above Average
+## 6                 Afghanistan                       9.2    Above Average
+## 7                       Sudan                       8.8    Above Average
+## 8    Central African Republic                       9.3    Above Average
+## 9                        Chad                       9.5    Above Average
+## 10                      Haiti                       8.8    Above Average
+## 11                   Ethiopia                       9.8    Above Average
+## 12                    Myanmar                       7.0    Above Average
+## 13                       Mali                       8.8    Above Average
+## 14                     Guinea                       8.8    Above Average
+## 15                    Nigeria                       9.6    Above Average
+## 16                   Zimbabwe                       8.7    Above Average
+## 17                      Libya                       6.0    Above Average
+## 18                    Ukraine                       7.3    Above Average
+## 19                    Eritrea                       7.7    Above Average
+## 20                    Burundi                       8.7    Above Average
+## 21               Burkina Faso                       8.3    Above Average
+## 22                 Mozambique                       9.6    Above Average
+## 23                   Cameroon                       9.0    Above Average
+## 24                      Niger                       8.9    Above Average
+## 25                    Lebanon                       5.8 Below/At Average
+## 26                     Uganda                       9.2    Above Average
+## 27                       Iraq                       8.2    Above Average
+## 28             Congo Republic                       8.5    Above Average
+## 29                  Venezuela                       6.5    Above Average
+## 30                  Sri Lanka                       7.2    Above Average
+## 31              Guinea Bissau                       8.9    Above Average
+## 32                   Pakistan                       8.3    Above Average
+## 33                    Liberia                       8.4    Above Average
+## 34                  Palestine                       8.3    Above Average
+## 35                      Kenya                       8.1    Above Average
+## 36              Cote d&#39;Ivoire                       8.6    Above Average
+## 37                 Mauritania                       8.6    Above Average
+## 38                North Korea                       7.3    Above Average
+## 39                     Angola                       9.3    Above Average
+## 40                       Iran                       6.8    Above Average
+## 41                 Bangladesh                       7.7    Above Average
+## 42          Equatorial Guinea                       9.1    Above Average
+## 43                     Malawi                       9.6    Above Average
+## 44                     Rwanda                       7.2    Above Average
+## 45                    Comoros                       8.2    Above Average
+## 46                   Djibouti                       7.1    Above Average
+## 47                       Togo                       7.4    Above Average
+## 48                     Zambia                       9.4    Above Average
+## 49                 Madagascar                       9.6    Above Average
+## 50                      Egypt                       6.7    Above Average
+## 51               Sierra Leone                       8.4    Above Average
+## 52                     Turkey                       4.5 Below/At Average
+## 53                     Russia                       4.8 Below/At Average
+## 54                   Cambodia                       6.4    Above Average
+## 55                      Nepal                       8.1    Above Average
+## 56            Solomon Islands                       7.1    Above Average
+## 57                   Honduras                       6.9    Above Average
+## 58                  Swaziland                       8.7    Above Average
+## 59                   Colombia                       7.8    Above Average
+## 60           Papua New Guinea                       7.4    Above Average
+## 61                Philippines                       7.9    Above Average
+## 62                  Nicaragua                       5.0 Below/At Average
+## 63                Timor-Leste                       8.7    Above Average
+## 64                  Guatemala                       7.1    Above Average
+## 65                   Tanzania                       8.6    Above Average
+## 66                    Lesotho                       8.6    Above Average
+## 67                     Gambia                       8.2    Above Average
+## 68                     Jordan                       6.3    Above Average
+## 69            Kyrgyz Republic                       5.7 Below/At Average
+## 70                       Laos                       6.4    Above Average
+## 71                     Brazil                       8.7    Above Average
+## 72                 Tajikistan                       7.0    Above Average
+## 73                      India                       8.5    Above Average
+## 74                      Benin                       8.0    Above Average
+## 75                       Peru                       7.6    Above Average
+## 76                 Azerbaijan                       3.8 Below/At Average
+## 77     Bosnia and Herzegovina                       6.1    Above Average
+## 78               South Africa                       8.0    Above Average
+## 79                    Georgia                       4.7 Below/At Average
+## 80                    Senegal                       7.4    Above Average
+## 81                    Bolivia                       6.9    Above Average
+## 82                       Fiji                       4.6 Below/At Average
+## 83                    Algeria                       5.0 Below/At Average
+## 84                    Belarus                       4.8 Below/At Average
+## 85                     Mexico                       6.9    Above Average
+## 86      Sao Tome and Principe                       6.9    Above Average
+## 87                    Ecuador                       6.7    Above Average
+## 88                 Micronesia                       5.8 Below/At Average
+## 89                El Salvador                       6.8    Above Average
+## 90                    Morocco                       4.4 Below/At Average
+## 91                   Thailand                       6.1    Above Average
+## 92                     Serbia                       4.1 Below/At Average
+## 93                    Armenia                       3.8 Below/At Average
+## 94                    Moldova                       5.4 Below/At Average
+## 95                 Uzbekistan                       4.3 Below/At Average
+## 96                     Bhutan                       5.4 Below/At Average
+## 97                    Tunisia                       4.3 Below/At Average
+## 98                  Indonesia                       7.0    Above Average
+## 99                      Gabon                       6.7    Above Average
+## 100              Saudi Arabia                       4.3 Below/At Average
+## 101                     Samoa                       4.7 Below/At Average
+## 102                   Bahrain                       4.1 Below/At Average
+## 103                     China                       6.5    Above Average
+## 104              Turkmenistan                       5.6 Below/At Average
+## 105                  Paraguay                       5.7 Below/At Average
+## 106                  Maldives                       5.2 Below/At Average
+## 107                     Ghana                       7.4    Above Average
+## 108                   Jamaica                       4.8 Below/At Average
+## 109                    Guyana                       5.8 Below/At Average
+## 110        Dominican Republic                       6.4    Above Average
+## 111                Kazakhstan                       4.1 Below/At Average
+## 112                   Namibia                       8.1    Above Average
+## 113                 Macedonia                       4.2 Below/At Average
+## 114                Cape Verde                       6.2    Above Average
+## 115                    Belize                       5.0 Below/At Average
+## 116                  Suriname                       5.5 Below/At Average
+## 117                      Cuba                       5.9 Below/At Average
+## 118                   Vietnam                       4.4 Below/At Average
+## 119                Montenegro                       4.1 Below/At Average
+## 120                    Cyprus                       3.4 Below/At Average
+## 121                   Albania                       4.1 Below/At Average
+## 122                  Botswana                       7.8    Above Average
+## 123                    Greece                       4.1 Below/At Average
+## 124                  Malaysia                       5.1 Below/At Average
+## 125         Brunei Darussalam                       2.8 Below/At Average
+## 126       Antigua and Barbuda                       3.7 Below/At Average
+## 127                   Grenada                       4.1 Below/At Average
+## 128                Seychelles                       4.2 Below/At Average
+## 129                   Romania                       4.5 Below/At Average
+## 130       Trinidad and Tobago                       4.1 Below/At Average
+## 131                  Bulgaria                       5.4 Below/At Average
+## 132                  Mongolia                       4.8 Below/At Average
+## 133                    Kuwait                       4.4 Below/At Average
+## 134                   Bahamas                       6.3    Above Average
+## 135                   Hungary                       3.5 Below/At Average
+## 136                    Panama                       4.9 Below/At Average
+## 137                      Oman                       4.2 Below/At Average
+## 138                   Croatia                       4.8 Below/At Average
+## 139                 Argentina                       5.7 Below/At Average
+## 140                  Barbados                       3.7 Below/At Average
+## 141             United States                       5.2 Below/At Average
+## 142                    Poland                       3.8 Below/At Average
+## 143                    Israel                       4.8 Below/At Average
+## 144                     Spain                       3.3 Below/At Average
+## 145                    Latvia                       3.2 Below/At Average
+## 146                     Italy                       4.6 Below/At Average
+## 147                     Chile                       5.9 Below/At Average
+## 148            United Kingdom                       3.4 Below/At Average
+## 149                     Qatar                       3.0 Below/At Average
+## 150                Costa Rica                       2.9 Below/At Average
+## 151            Czech Republic                       3.2 Below/At Average
+## 152                 Lithuania                       3.6 Below/At Average
+## 153                   Estonia                       2.9 Below/At Average
+## 154                 Mauritius                       3.1 Below/At Average
+## 155           Slovak Republic                       2.6 Below/At Average
+## 156      United Arab Emirates                       3.6 Below/At Average
+## 157                   Uruguay                       3.4 Below/At Average
+## 158                     Malta                       3.7 Below/At Average
+## 159               South Korea                       2.5 Below/At Average
+## 160                   Belgium                       4.2 Below/At Average
+## 161                     Japan                       5.9 Below/At Average
+## 162                    France                       3.1 Below/At Average
+## 163                  Slovenia                       3.6 Below/At Average
+## 164                  Portugal                       4.0 Below/At Average
+## 165                 Singapore                       2.5 Below/At Average
+## 166                   Germany                       2.3 Below/At Average
+## 167                   Austria                       3.6 Below/At Average
+## 168                 Australia                       3.8 Below/At Average
+## 169               Netherlands                       2.5 Below/At Average
+## 170                    Sweden                       3.0 Below/At Average
+## 171                Luxembourg                       2.4 Below/At Average
+## 172                   Ireland                       2.8 Below/At Average
+## 173                    Canada                       1.2 Below/At Average
+## 174                   Denmark                       2.3 Below/At Average
+## 175               Switzerland                       2.4 Below/At Average
+## 176               New Zealand                       1.1 Below/At Average
+## 177                   Finland                       1.7 Below/At Average
+## 178                   Iceland                       1.5 Below/At Average
+## 179                    Norway                       1.4 Below/At Average</code></pre>
 <p><strong>New function</strong></p>
-<pre class="r"><code>mystery=function(DF,positionsToUse,CountryColumn=&#39;Country&#39;){
-  newDF=DF[,c(CountryColumn),drop = FALSE]
-  average=&#39;average&#39;
-  newDF[,average]=apply(DF[,positionsToUse],1,mean,na.rm = TRUE)
-  return(newDF[,c(CountryColumn,average)])
+<pre class="r"><code>mystery=function(DF,positionsToUse,CountryColumn=&#39;Country&#39;){ # input of the function 
+  newDF=DF[,c(CountryColumn),drop = FALSE] # create a new data frame with the &#39;country&#39; column
+  average=&#39;average&#39; # new column in data frame named &#39;average&#39;
+  newDF[,average]=apply(DF[,positionsToUse],1,mean,na.rm = TRUE) # new data frame to include a new column named &#39;average&#39; that finds the mean of the &#39;positions to use&#39; for each country and to ignore missing values
+  return(newDF[,c(CountryColumn,average)]) # return data frame with the country column and the average of the columns specified
 }</code></pre>
-<p>DF:[4:6],1 New column - average? Just a data frame with the country
-and average but the average of what? Should use the apply function
-somehow</p>
-<p>Code breakdown - the function is asking for a new data frame (newDF?)
-of columns 4 to 6 and the country column - arguments are ‘DF’,
-‘positionsToUse’, and ‘country’, the rest is the function body; it’s
-asking for the average but it wouldn’t make sense to ask for the average
-of the country column since it’s characters. I’m not sure what the
-‘positions to use’ are referencing but maybe the columns (1,4,5,6?) -
-Does the 1 in line 198 represent a row? -</p>
-<pre class="r"><code>mystery=(fragility23[,c(1,4:6)]) ## code creates a new data frame called &#39;mystery&#39; with columns 1, 4, 5, and 6</code></pre>
-<pre class="r"><code>grep(pattern = &quot;Country|Total|S1: Demographic Pressures|S2: Refugees and IDPs&quot;,x = names(mystery),fixed = F,value = T) ## code used to test the column names in the new file</code></pre>
-<pre><code>## [1] &quot;Country&quot;                   &quot;Total&quot;                    
-## [3] &quot;S1: Demographic Pressures&quot; &quot;S2: Refugees and IDPs&quot;</code></pre>
-<pre class="r"><code>keep=grep(&quot;Country|Total|S1: Demographic Pressures|S2: Refugees and IDPs&quot;,names(fragility23),fixed = F,value = T)
-mystery=fragility23[,keep] ## code used to create a new data frame</code></pre>
-<pre class="r"><code>names(mystery)[3]=c(&quot;S1&quot;)
-names(mystery)[4]=c(&quot;S2&quot;) ## Code changes the name of column 3 and 4</code></pre>
-<p>Not sure how I would do the above in one line</p>
-<pre class="r"><code>summary(mystery) ## code requests a statistical description of the columns</code></pre>
-<pre><code>##    Country              Total              S1               S2        
-##  Length:179         Min.   : 14.50   Min.   : 1.100   Min.   : 0.500  
-##  Class :character   1st Qu.: 49.00   1st Qu.: 4.100   1st Qu.: 2.800  
-##  Mode  :character   Median : 68.20   Median : 5.900   Median : 4.500  
-##                     Mean   : 65.83   Mean   : 5.956   Mean   : 4.764  
-##                     3rd Qu.: 82.20   3rd Qu.: 8.050   3rd Qu.: 6.450  
-##                     Max.   :111.90   Max.   :10.000   Max.   :10.000</code></pre>
+<pre class="r"><code>mystery(fragility23,4:6) # code creates a new data frame with the country as a column and another column that holds the mean of columns 4, 5 and 6.</code></pre>
+<pre><code>##                       Country   average
+## 1                     Somalia 43.633333
+## 2                       Yemen 42.700000
+## 3                 South Sudan 42.733333
+## 4   Congo Democratic Republic 42.233333
+## 5                       Syria 41.200000
+## 6                 Afghanistan 41.466667
+## 7                       Sudan 41.533333
+## 8    Central African Republic 41.500000
+## 9                        Chad 41.033333
+## 10                      Haiti 39.800000
+## 11                   Ethiopia 39.900000
+## 12                    Myanmar 38.800000
+## 13                       Mali 38.933333
+## 14                     Guinea 37.833333
+## 15                    Nigeria 38.000000
+## 16                   Zimbabwe 37.733333
+## 17                      Libya 36.533333
+## 18                    Ukraine 37.733333
+## 19                    Eritrea 36.266667
+## 20                    Burundi 36.966667
+## 21               Burkina Faso 36.833333
+## 22                 Mozambique 37.166667
+## 23                   Cameroon 37.133333
+## 24                      Niger 36.733333
+## 25                    Lebanon 35.466667
+## 26                     Uganda 36.533333
+## 27                       Iraq 35.766667
+## 28             Congo Republic 35.233333
+## 29                  Venezuela 34.500000
+## 30                  Sri Lanka 34.700000
+## 31              Guinea Bissau 34.766667
+## 32                   Pakistan 35.266667
+## 33                    Liberia 34.900000
+## 34                  Palestine 34.133333
+## 35                      Kenya 34.400000
+## 36              Cote d&#39;Ivoire 33.900000
+## 37                 Mauritania 34.633333
+## 38                North Korea 32.500000
+## 39                     Angola 33.833333
+## 40                       Iran 32.566667
+## 41                 Bangladesh 33.466667
+## 42          Equatorial Guinea 33.000000
+## 43                     Malawi 32.933333
+## 44                     Rwanda 32.266667
+## 45                    Comoros 31.966667
+## 46                   Djibouti 32.133333
+## 47                       Togo 31.733333
+## 48                     Zambia 32.033333
+## 49                 Madagascar 32.100000
+## 50                      Egypt 31.266667
+## 51               Sierra Leone 32.400000
+## 52                     Turkey 31.300000
+## 53                     Russia 30.100000
+## 54                   Cambodia 30.200000
+## 55                      Nepal 31.633333
+## 56            Solomon Islands 30.566667
+## 57                   Honduras 30.766667
+## 58                  Swaziland 30.500000
+## 59                   Colombia 31.233333
+## 60           Papua New Guinea 30.133333
+## 61                Philippines 30.500000
+## 62                  Nicaragua 29.266667
+## 63                Timor-Leste 30.633333
+## 64                  Guatemala 29.900000
+## 65                   Tanzania 30.033333
+## 66                    Lesotho 29.600000
+## 67                     Gambia 30.033333
+## 68                     Jordan 30.133333
+## 69            Kyrgyz Republic 28.400000
+## 70                       Laos 28.833333
+## 71                     Brazil 28.900000
+## 72                 Tajikistan 28.333333
+## 73                      India 28.900000
+## 74                      Benin 29.066667
+## 75                       Peru 28.400000
+## 76                 Azerbaijan 27.600000
+## 77     Bosnia and Herzegovina 28.533333
+## 78               South Africa 28.000000
+## 79                    Georgia 27.700000
+## 80                    Senegal 28.233333
+## 81                    Bolivia 26.733333
+## 82                       Fiji 26.000000
+## 83                    Algeria 27.066667
+## 84                    Belarus 25.966667
+## 85                     Mexico 27.400000
+## 86      Sao Tome and Principe 27.266667
+## 87                    Ecuador 27.033333
+## 88                 Micronesia 26.433333
+## 89                El Salvador 27.133333
+## 90                    Morocco 25.900000
+## 91                   Thailand 26.333333
+## 92                     Serbia 26.266667
+## 93                    Armenia 26.033333
+## 94                    Moldova 26.266667
+## 95                 Uzbekistan 24.966667
+## 96                     Bhutan 25.866667
+## 97                    Tunisia 24.533333
+## 98                  Indonesia 25.666667
+## 99                      Gabon 24.933333
+## 100              Saudi Arabia 24.266667
+## 101                     Samoa 24.433333
+## 102                   Bahrain 23.533333
+## 103                     China 24.900000
+## 104              Turkmenistan 24.133333
+## 105                  Paraguay 24.100000
+## 106                  Maldives 23.866667
+## 107                     Ghana 24.400000
+## 108                   Jamaica 22.966667
+## 109                    Guyana 23.466667
+## 110        Dominican Republic 23.266667
+## 111                Kazakhstan 22.333333
+## 112                   Namibia 24.000000
+## 113                 Macedonia 23.600000
+## 114                Cape Verde 23.300000
+## 115                    Belize 22.600000
+## 116                  Suriname 22.666667
+## 117                      Cuba 22.866667
+## 118                   Vietnam 22.200000
+## 119                Montenegro 21.900000
+## 120                    Cyprus 22.100000
+## 121                   Albania 21.233333
+## 122                  Botswana 22.066667
+## 123                    Greece 21.500000
+## 124                  Malaysia 21.100000
+## 125         Brunei Darussalam 19.533333
+## 126       Antigua and Barbuda 20.066667
+## 127                   Grenada 20.000000
+## 128                Seychelles 19.933333
+## 129                   Romania 20.500000
+## 130       Trinidad and Tobago 19.833333
+## 131                  Bulgaria 20.533333
+## 132                  Mongolia 19.466667
+## 133                    Kuwait 19.200000
+## 134                   Bahamas 19.333333
+## 135                   Hungary 19.233333
+## 136                    Panama 18.666667
+## 137                      Oman 18.166667
+## 138                   Croatia 20.100000
+## 139                 Argentina 17.900000
+## 140                  Barbados 17.000000
+## 141             United States 17.566667
+## 142                    Poland 18.300000
+## 143                    Israel 16.866667
+## 144                     Spain 16.233333
+## 145                    Latvia 16.500000
+## 146                     Italy 17.166667
+## 147                     Chile 16.533333
+## 148            United Kingdom 15.900000
+## 149                     Qatar 14.933333
+## 150                Costa Rica 16.066667
+## 151            Czech Republic 15.966667
+## 152                 Lithuania 15.300000
+## 153                   Estonia 14.700000
+## 154                 Mauritius 14.233333
+## 155           Slovak Republic 14.566667
+## 156      United Arab Emirates 14.000000
+## 157                   Uruguay 13.200000
+## 158                     Malta 13.300000
+## 159               South Korea 11.700000
+## 160                   Belgium 12.566667
+## 161                     Japan 13.000000
+## 162                    France 11.433333
+## 163                  Slovenia 11.166667
+## 164                  Portugal 10.366667
+## 165                 Singapore  9.500000
+## 166                   Germany 10.466667
+## 167                   Austria 10.833333
+## 168                 Australia  9.166667
+## 169               Netherlands  8.633333
+## 170                    Sweden  9.100000
+## 171                Luxembourg  8.233333
+## 172                   Ireland  7.966667
+## 173                    Canada  7.366667
+## 174                   Denmark  7.733333
+## 175               Switzerland  7.800000
+## 176               New Zealand  6.333333
+## 177                   Finland  6.533333
+## 178                   Iceland  6.233333
+## 179                    Norway  5.866667</code></pre>
 </div>
 </div>
 </div>
