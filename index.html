@@ -901,7 +901,7 @@ frame in R</h2>
 <pre><code>## [1] &quot;double&quot;</code></pre>
 <p>Now our own function:</p>
 <pre class="r"><code>theOnesOK = function(DF_country_and_variable) { # input of the function
-  variable_values &lt;- DF_country_and_variable[,2] # variable value is a column of information
+  variable_values &lt;- DF_country_and_variable[,2] # code is asking for the country column and the variable value chosen in columns
   avg_value &lt;- mean(variable_values, na.rm = TRUE) # find mean mean of the column and ignore missing values
   is_above &lt;- ifelse(variable_values &gt; avg_value, &quot;Above Average&quot;, &quot;Below/At Average&quot;) # determine if each country&#39;s value is above average or below/at average
   DF_country_and_variable$Status &lt;- is_above # create a &#39;status&#39; column to label each country with the status above
@@ -1088,6 +1088,201 @@ frame in R</h2>
 ## 177                   Finland                       1.7 Below/At Average
 ## 178                   Iceland                       1.5 Below/At Average
 ## 179                    Norway                       1.4 Below/At Average</code></pre>
+<p><strong>Different function</strong></p>
+<pre class="r"><code>theOnesOK2 = function(DF, DFvariable, CountryColumn=&#39;Country&#39;) { # input of the function
+  variable_values &lt;- DF[,DFvariable] # in the new data frame, the variable value will be whichever columns chosen
+  avg_value &lt;- mean(variable_values, na.rm = TRUE) # find mean mean of the column and ignore missing values
+  is_above &lt;- ifelse(variable_values &gt; avg_value, &quot;Above Average&quot;, &quot;Below/At Average&quot;) # based on the column chosen above, the code requests to determine if each country is above average or below/at average
+  newname = paste(&#39;Status_on&#39;, DFvariable) # code requests to rename the column of the variable to &#39;status_on_variable name&#39;
+  DF[,newname] &lt;- is_above # code requests that the new data frame includes the &#39;newname&#39; &#39;status_on&#39; column showing whether each country is &#39;above average&#39; or &#39;below/at average&#39;
+  return(DF[,c(CountryColumn, newname)]) # code will return a data frame with the country and the status of that country on a variable in comparison to the mean of the column
+}</code></pre>
+<p>**Example below. # This function differs from ‘theOnesOK’ in multiple
+ways. While it still calculates the mean of the column and assigns each
+country a status, theOnesOK created a new column while theOnesOK2
+renamed the column. TheOnesOK2 is also different because it automated
+the country column.</p>
+<pre class="r"><code>theOnesOK2(fragility23, &quot;S1: Demographic Pressures&quot;)</code></pre>
+<pre><code>##                       Country Status_on S1: Demographic Pressures
+## 1                     Somalia                       Above Average
+## 2                       Yemen                       Above Average
+## 3                 South Sudan                       Above Average
+## 4   Congo Democratic Republic                       Above Average
+## 5                       Syria                       Above Average
+## 6                 Afghanistan                       Above Average
+## 7                       Sudan                       Above Average
+## 8    Central African Republic                       Above Average
+## 9                        Chad                       Above Average
+## 10                      Haiti                       Above Average
+## 11                   Ethiopia                       Above Average
+## 12                    Myanmar                       Above Average
+## 13                       Mali                       Above Average
+## 14                     Guinea                       Above Average
+## 15                    Nigeria                       Above Average
+## 16                   Zimbabwe                       Above Average
+## 17                      Libya                       Above Average
+## 18                    Ukraine                       Above Average
+## 19                    Eritrea                       Above Average
+## 20                    Burundi                       Above Average
+## 21               Burkina Faso                       Above Average
+## 22                 Mozambique                       Above Average
+## 23                   Cameroon                       Above Average
+## 24                      Niger                       Above Average
+## 25                    Lebanon                    Below/At Average
+## 26                     Uganda                       Above Average
+## 27                       Iraq                       Above Average
+## 28             Congo Republic                       Above Average
+## 29                  Venezuela                       Above Average
+## 30                  Sri Lanka                       Above Average
+## 31              Guinea Bissau                       Above Average
+## 32                   Pakistan                       Above Average
+## 33                    Liberia                       Above Average
+## 34                  Palestine                       Above Average
+## 35                      Kenya                       Above Average
+## 36              Cote d&#39;Ivoire                       Above Average
+## 37                 Mauritania                       Above Average
+## 38                North Korea                       Above Average
+## 39                     Angola                       Above Average
+## 40                       Iran                       Above Average
+## 41                 Bangladesh                       Above Average
+## 42          Equatorial Guinea                       Above Average
+## 43                     Malawi                       Above Average
+## 44                     Rwanda                       Above Average
+## 45                    Comoros                       Above Average
+## 46                   Djibouti                       Above Average
+## 47                       Togo                       Above Average
+## 48                     Zambia                       Above Average
+## 49                 Madagascar                       Above Average
+## 50                      Egypt                       Above Average
+## 51               Sierra Leone                       Above Average
+## 52                     Turkey                    Below/At Average
+## 53                     Russia                    Below/At Average
+## 54                   Cambodia                       Above Average
+## 55                      Nepal                       Above Average
+## 56            Solomon Islands                       Above Average
+## 57                   Honduras                       Above Average
+## 58                  Swaziland                       Above Average
+## 59                   Colombia                       Above Average
+## 60           Papua New Guinea                       Above Average
+## 61                Philippines                       Above Average
+## 62                  Nicaragua                    Below/At Average
+## 63                Timor-Leste                       Above Average
+## 64                  Guatemala                       Above Average
+## 65                   Tanzania                       Above Average
+## 66                    Lesotho                       Above Average
+## 67                     Gambia                       Above Average
+## 68                     Jordan                       Above Average
+## 69            Kyrgyz Republic                    Below/At Average
+## 70                       Laos                       Above Average
+## 71                     Brazil                       Above Average
+## 72                 Tajikistan                       Above Average
+## 73                      India                       Above Average
+## 74                      Benin                       Above Average
+## 75                       Peru                       Above Average
+## 76                 Azerbaijan                    Below/At Average
+## 77     Bosnia and Herzegovina                       Above Average
+## 78               South Africa                       Above Average
+## 79                    Georgia                    Below/At Average
+## 80                    Senegal                       Above Average
+## 81                    Bolivia                       Above Average
+## 82                       Fiji                    Below/At Average
+## 83                    Algeria                    Below/At Average
+## 84                    Belarus                    Below/At Average
+## 85                     Mexico                       Above Average
+## 86      Sao Tome and Principe                       Above Average
+## 87                    Ecuador                       Above Average
+## 88                 Micronesia                    Below/At Average
+## 89                El Salvador                       Above Average
+## 90                    Morocco                    Below/At Average
+## 91                   Thailand                       Above Average
+## 92                     Serbia                    Below/At Average
+## 93                    Armenia                    Below/At Average
+## 94                    Moldova                    Below/At Average
+## 95                 Uzbekistan                    Below/At Average
+## 96                     Bhutan                    Below/At Average
+## 97                    Tunisia                    Below/At Average
+## 98                  Indonesia                       Above Average
+## 99                      Gabon                       Above Average
+## 100              Saudi Arabia                    Below/At Average
+## 101                     Samoa                    Below/At Average
+## 102                   Bahrain                    Below/At Average
+## 103                     China                       Above Average
+## 104              Turkmenistan                    Below/At Average
+## 105                  Paraguay                    Below/At Average
+## 106                  Maldives                    Below/At Average
+## 107                     Ghana                       Above Average
+## 108                   Jamaica                    Below/At Average
+## 109                    Guyana                    Below/At Average
+## 110        Dominican Republic                       Above Average
+## 111                Kazakhstan                    Below/At Average
+## 112                   Namibia                       Above Average
+## 113                 Macedonia                    Below/At Average
+## 114                Cape Verde                       Above Average
+## 115                    Belize                    Below/At Average
+## 116                  Suriname                    Below/At Average
+## 117                      Cuba                    Below/At Average
+## 118                   Vietnam                    Below/At Average
+## 119                Montenegro                    Below/At Average
+## 120                    Cyprus                    Below/At Average
+## 121                   Albania                    Below/At Average
+## 122                  Botswana                       Above Average
+## 123                    Greece                    Below/At Average
+## 124                  Malaysia                    Below/At Average
+## 125         Brunei Darussalam                    Below/At Average
+## 126       Antigua and Barbuda                    Below/At Average
+## 127                   Grenada                    Below/At Average
+## 128                Seychelles                    Below/At Average
+## 129                   Romania                    Below/At Average
+## 130       Trinidad and Tobago                    Below/At Average
+## 131                  Bulgaria                    Below/At Average
+## 132                  Mongolia                    Below/At Average
+## 133                    Kuwait                    Below/At Average
+## 134                   Bahamas                       Above Average
+## 135                   Hungary                    Below/At Average
+## 136                    Panama                    Below/At Average
+## 137                      Oman                    Below/At Average
+## 138                   Croatia                    Below/At Average
+## 139                 Argentina                    Below/At Average
+## 140                  Barbados                    Below/At Average
+## 141             United States                    Below/At Average
+## 142                    Poland                    Below/At Average
+## 143                    Israel                    Below/At Average
+## 144                     Spain                    Below/At Average
+## 145                    Latvia                    Below/At Average
+## 146                     Italy                    Below/At Average
+## 147                     Chile                    Below/At Average
+## 148            United Kingdom                    Below/At Average
+## 149                     Qatar                    Below/At Average
+## 150                Costa Rica                    Below/At Average
+## 151            Czech Republic                    Below/At Average
+## 152                 Lithuania                    Below/At Average
+## 153                   Estonia                    Below/At Average
+## 154                 Mauritius                    Below/At Average
+## 155           Slovak Republic                    Below/At Average
+## 156      United Arab Emirates                    Below/At Average
+## 157                   Uruguay                    Below/At Average
+## 158                     Malta                    Below/At Average
+## 159               South Korea                    Below/At Average
+## 160                   Belgium                    Below/At Average
+## 161                     Japan                    Below/At Average
+## 162                    France                    Below/At Average
+## 163                  Slovenia                    Below/At Average
+## 164                  Portugal                    Below/At Average
+## 165                 Singapore                    Below/At Average
+## 166                   Germany                    Below/At Average
+## 167                   Austria                    Below/At Average
+## 168                 Australia                    Below/At Average
+## 169               Netherlands                    Below/At Average
+## 170                    Sweden                    Below/At Average
+## 171                Luxembourg                    Below/At Average
+## 172                   Ireland                    Below/At Average
+## 173                    Canada                    Below/At Average
+## 174                   Denmark                    Below/At Average
+## 175               Switzerland                    Below/At Average
+## 176               New Zealand                    Below/At Average
+## 177                   Finland                    Below/At Average
+## 178                   Iceland                    Below/At Average
+## 179                    Norway                    Below/At Average</code></pre>
 <p><strong>New function</strong></p>
 <pre class="r"><code>mystery=function(DF,positionsToUse,CountryColumn=&#39;Country&#39;){ # input of the function 
   newDF=DF[,c(CountryColumn),drop = FALSE] # create a new data frame with the &#39;country&#39; column

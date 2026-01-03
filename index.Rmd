@@ -115,7 +115,7 @@ Now our own function:
 
 ```{r}
 theOnesOK = function(DF_country_and_variable) { # input of the function
-  variable_values <- DF_country_and_variable[,2] # variable value is a column of information
+  variable_values <- DF_country_and_variable[,2] # code is asking for the country column and the variable value chosen in columns
   avg_value <- mean(variable_values, na.rm = TRUE) # find mean mean of the column and ignore missing values
   is_above <- ifelse(variable_values > avg_value, "Above Average", "Below/At Average") # determine if each country's value is above average or below/at average
   DF_country_and_variable$Status <- is_above # create a 'status' column to label each country with the status above
@@ -126,6 +126,27 @@ theOnesOK = function(DF_country_and_variable) { # input of the function
 ```{r}
 theOnesOK(fragility23[,c('Country','S1: Demographic Pressures')]) # code creates a list of information from 'fragility23' that includes the columns of 'country' and 'S1: Demographic Pressures' and adds a third column that tells whether the country in above the mean or below/at the mean of S1: Demographic Pressures.
 ```
+
+**Different function**
+
+```{r}
+theOnesOK2 = function(DF, DFvariable, CountryColumn='Country') { # input of the function
+  variable_values <- DF[,DFvariable] # in the new data frame, the variable value will be whichever columns chosen
+  avg_value <- mean(variable_values, na.rm = TRUE) # find mean mean of the column and ignore missing values
+  is_above <- ifelse(variable_values > avg_value, "Above Average", "Below/At Average") # based on the column chosen above, the code requests to determine if each country is above average or below/at average
+  newname = paste('Status_on', DFvariable) # code requests to rename the column of the variable to 'status_on_variable name'
+  DF[,newname] <- is_above # code requests that the new data frame includes the 'newname' 'status_on' column showing whether each country is 'above average' or 'below/at average'
+  return(DF[,c(CountryColumn, newname)]) # code will return a data frame with the country and the status of that country on a variable in comparison to the mean of the column
+}
+```
+
+**Example below.
+# This function differs from 'theOnesOK' in multiple ways. While it still calculates the mean of the column and assigns each country a status, theOnesOK created a new column while theOnesOK2 renamed the column. TheOnesOK2 is also different because it automated the country column.
+
+```{r}
+theOnesOK2(fragility23, "S1: Demographic Pressures")
+```
+
 
 **New function**
 
